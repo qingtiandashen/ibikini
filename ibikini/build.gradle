@@ -1,0 +1,89 @@
+//==============================JitPack 上传插件配置 end=======================
+plugins {
+    id 'groovy'
+    id 'maven-publish'//添加maven plugin, 用于发布我们的jar
+    id 'java-gradle-plugin'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    implementation gradleApi() //必须
+    implementation localGroovy() //必须
+    implementation 'com.android.tools.build:gradle:3.5.2'
+    implementation 'com.tinify:tinify:1.6.4'
+    implementation 'com.google.code.gson:gson:2.9.0'
+}
+
+def realGroupId = "com.andrea.ibikini"
+def realArtifactId = "ibikini"
+def versionName = "1.0.0"
+
+
+//Gradle 配置的方式注册插件
+gradlePlugin {
+    plugins {
+        greeting {
+            // 插件id
+            id = 'ibikini'
+            // 插件实现类
+            implementationClass = 'com.andrea.ibikini.plugin.TinyCompressTask'
+        }
+    }
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+//            release(MavenPublication) {
+//                // Applies the component for the release build variant.
+//                from components.java
+//
+//                // You can then customize attributes of the publication as shown below.
+//                groupId = realGroupId
+//                artifactId = realArtifactId + "_release"
+//                version = versionName
+//            }
+            // Creates a Maven publication called “debug”.
+            debug(MavenPublication) {
+                // Applies the component for the debug build variant.
+                from components.java
+
+                groupId = realGroupId
+                artifactId = realArtifactId + "_debug"
+                version = versionName
+            }
+        }
+    }
+}
+
+//将插件打包上传到本地maven仓库
+//publishing {
+//    repositories {
+//        maven {
+//            //指定 maven 发布三剑客
+//            pom.groupId = realGroupId
+//            pom.artifactId = realArtifactId
+//            pom.version = versionName
+//            //指定本地 maven 仓库的路径，这里我指定的就是当前 Module 目录下
+//            repository(url: uri('../ibikini'))
+//        }
+//    }
+//}
+
+publishing {
+    repositories {
+        maven {
+//            pom.groupId = realGroupId
+//            pom.artifactId = realArtifactId
+//            pom.version = versionName
+//            url = uri("${rootProject.projectDir}/maven-repo")
+            url "$buildDir/repo"
+        }
+    }
+
+}

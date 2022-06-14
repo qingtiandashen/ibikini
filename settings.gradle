@@ -1,0 +1,3 @@
+rootProject.name = "BikiniPluginProject"
+include ':app'
+include ':ibikini'
