@@ -127,6 +127,7 @@ class TinyCompressTask implements Plugin<Project> {
             patternSet.include("src/main/res/**/*.jpg")
             patternSet.include("src/main/res/**/*.jpeg")
             patternSet.include("src/main/res/**/*.JPEG")
+            patternSet.include("src/main/res/**/*.webp")
 
             def resultFile = file.matching(patternSet)
             resultFile.eachWithIndex { File picFile, int picIndex ->
@@ -327,7 +328,7 @@ class TinyCompressTask implements Plugin<Project> {
         if (!compressDir.exists()) {//创建压缩记录文件夹
             compressDir.mkdirs()
         }
-        def date = new Date().format("yyyy-MM-dd HH:mm:ss")
+        def date = new Date().format("yyyyMMdd_HHmmss")
         def compressList = new File(compressDir, COMPRESS_REPORT + date + ".txt")
         if (!compressList.exists()) {//创建图片压缩记录文件
             compressList.createNewFile()
