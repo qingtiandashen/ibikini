@@ -5,6 +5,7 @@ import com.andrea.ibikini.plugin.bean.ReportBean
 import com.andrea.ibikini.plugin.extension.CompressExtension
 import com.andrea.ibikini.plugin.extension.ConfigExtension
 import com.andrea.ibikini.plugin.extension.TinyChannelExtension
+import com.andrea.ibikini.plugin.filter.ImageFilter
 import com.andrea.ibikini.plugin.utils.FileUtils
 import com.andrea.ibikini.plugin.utils.BiLog
 import com.andrea.ibikini.plugin.utils.StringUtils
@@ -34,6 +35,7 @@ class TinyCompressTask implements Plugin<Project> {
     static List<ReportBean> reportList = new ArrayList<>()
     static Project mProject
     static Long startTimeForReport
+    static List<File> targetFileList = new ArrayList<>()
 
     @Override
     void apply(Project project) {
@@ -103,18 +105,35 @@ class TinyCompressTask implements Plugin<Project> {
             return
         }
         readFile()
-        startCompress()
+        def isMultiProject = mProject.ibikini.compressConfig.isMultiProject
+        if (isMultiProject) {
+            collectMultiProject()
+        } else {
+            collectSingleProject()
+        }
+        startCompressProject()
     }
 
     /**
-     * 开启压缩过程
-     * 1，读取compressList.txt文件列表，获取已压缩文件
-     * 2，只压缩未压缩过的文件并记录到压缩列表里面
-     * 3，将本次压缩生成压缩报告
-     * 4，保存新的压缩文件到compressList.txt文件列表
+     * 压缩多项目
      */
-    private static void startCompress() {
-        startTimeForReport = System.currentTimeMillis()
+    private static void collectMultiProject() {
+        def fileDir = mProject.getRootDir()
+        traverseFile(fileDir)
+    }
+
+    private static void traverseFile(File file) {
+        if (file.isDirectory()) {
+            File[] fileList = file.listFiles(new ImageFilter());
+            for (File f : fileList) {
+                traverseFile(f);//递归调用
+            }
+        } else {
+            targetFileList.add(file)
+        }
+    }
+
+    private static void collectSingleProject() {
         //获取各module
         mProject.getRootProject().getSubprojects().eachWithIndex { Project entry, int i ->
             def moduleName = entry.project.name
@@ -131,19 +150,33 @@ class TinyCompressTask implements Plugin<Project> {
 
             def resultFile = file.matching(patternSet)
             resultFile.eachWithIndex { File picFile, int picIndex ->
-                def fileRelativePath = picFile.path.replace(entry.projectDir.path, "")
-//                println "picFile->" + picFile.path
-                //不在白名单，图片大小允许裁剪，没有优化过才优化
-                if (!isWhiteList(picFile) && checkImgSize(picFile)) {
-                    //这样不参与压缩的不用计算crc32
-                    String crc32 = CRCUtils.loadCRC32(picFile)
-                    if (!checkImgPathExits(crc32)) {
-                        def tinyKeys = mProject.ibikini.compressConfig.tiny.tinyKeys
-                        def result = resizePng(moduleName, tinyKeys, currentKeyIndex, picFile, fileRelativePath)
-                        if (result) {
-                            String newCrc32 = CRCUtils.loadCRC32(picFile)//新文件的crc32值
-                            addImgPath(newCrc32)//保存
-                        }
+                targetFileList.add(picFile)
+            }
+        }
+
+    }
+
+    /**
+     * 压缩项目
+     * 1，读取compressList.txt文件列表，获取已压缩文件
+     * 2，只压缩未压缩过的文件并记录到压缩列表里面
+     * 3，将本次压缩生成压缩报告
+     * 4，保存新的压缩文件到compressList.txt文件列表
+     */
+    private static void startCompressProject() {
+        startTimeForReport = System.currentTimeMillis()
+        targetFileList.eachWithIndex { File picFile, int picIndex ->
+            def fileRelativePath = picFile.path.replace(entry.projectDir.path, "")
+            //不在白名单，图片大小允许裁剪，没有优化过才优化
+            if (!isWhiteList(picFile) && checkImgSize(picFile)) {
+                //这样不参与压缩的不用计算crc32
+                String crc32 = CRCUtils.loadCRC32(picFile)
+                if (!checkImgPathExits(crc32)) {
+                    def tinyKeys = mProject.ibikini.compressConfig.tiny.tinyKeys
+                    def result = resizePng(moduleName, tinyKeys, currentKeyIndex, picFile, fileRelativePath)
+                    if (result) {
+                        String newCrc32 = CRCUtils.loadCRC32(picFile)//新文件的crc32值
+                        addImgPath(newCrc32)//保存
                     }
                 }
             }

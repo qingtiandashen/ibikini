@@ -15,6 +15,11 @@ class CompressExtension {
      */
     boolean compressEnable
 
+    /**
+     * 是不是压缩多项目，默认false压缩单个工程
+     */
+    boolean isMultiProject
+
 //    /**
 //     * 选择tiny压缩
 //     */
@@ -39,6 +44,7 @@ class CompressExtension {
     public String toString() {
         return "CompressExtension{" +
                 "compressEnable=" + compressEnable +
+                "isMultiProject=" + isMultiProject +
                 ", whiteList=" + whiteList +
                 ", minCompressSize=" + minCompressSize +
                 '}'
