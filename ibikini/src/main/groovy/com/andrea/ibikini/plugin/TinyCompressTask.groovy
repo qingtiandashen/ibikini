@@ -166,7 +166,7 @@ class TinyCompressTask implements Plugin<Project> {
     private static void startCompressProject() {
         startTimeForReport = System.currentTimeMillis()
         targetFileList.eachWithIndex { File picFile, int picIndex ->
-            def fileRelativePath = picFile.path.replace(entry.projectDir.path, "")
+            def fileRelativePath = picFile.path.replace(mProject.rootDir.path, "")
             //不在白名单，图片大小允许裁剪，没有优化过才优化
             if (!isWhiteList(picFile) && checkImgSize(picFile)) {
                 //这样不参与压缩的不用计算crc32
