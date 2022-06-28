@@ -6,7 +6,7 @@ public class StringUtils {
 
     public static String getModuleName(String url) {
         int index1 = url.indexOf(File.separator);
-        int index2 = url.indexOf("/", 1);
+        int index2 = url.indexOf(File.separator, 1);
         return url.substring(index1 + 1, index2);
     }
 
