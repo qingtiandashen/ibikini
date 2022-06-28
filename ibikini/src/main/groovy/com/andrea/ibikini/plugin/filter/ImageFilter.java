@@ -28,12 +28,19 @@ public class ImageFilter implements FileFilter {
         return file.getName().toLowerCase().endsWith(".9.png");
     }
 
+    /**
+     * res/mipmap或者res/drawable路径下
+     *
+     * @param file
+     * @return
+     */
     public boolean match(File file) {
-        return file.getName().toLowerCase().contains("src/main/res") ||
-                file.getName().toLowerCase().endsWith("png") ||
+        return (file.getAbsolutePath().toLowerCase().contains("res" + File.separator + "mipmap")
+                || file.getAbsolutePath().toLowerCase().contains("res" + File.separator + "drawable"))
+                && (file.getName().toLowerCase().endsWith("png") ||
                 file.getName().toLowerCase().endsWith("jpg") ||
                 file.getName().toLowerCase().endsWith("jpeg") ||
-                file.getName().toLowerCase().endsWith("webp");
+                file.getName().toLowerCase().endsWith("webp"));
     }
 
 }
