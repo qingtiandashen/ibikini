@@ -20,7 +20,7 @@ dependencies {
 
 def realGroupId = "com.andrea.ibikini"
 def realArtifactId = "ibikini"
-def versionName = "0.0.2.4"
+def versionName = "0.0.2.5"
 
 
 //Gradle 配置的方式注册插件

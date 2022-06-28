@@ -1,19 +1,19 @@
 plugins {
     id 'com.android.application'
-    id 'com.img.bikini'
+//    id 'com.img.bikini'
 }
 
-ibikini {
-    compressConfig {
-        compressEnable true
-        isMultiProject true
-        tiny {
-            tinyKeys = ["mLGtcsJGsDnMLH30StYK8Nw2pQ6Cs9b9", "mhZTJzkCf3kYrqz9cG3RFvWSNSQV6Yzk"]
-        }
-        whiteList = ["abddddd.jpeg"]
-        minCompressSize 1
-    }
-}
+//ibikini {
+//    compressConfig {
+//        compressEnable true
+//        isMultiProject true
+//        tiny {
+//            tinyKeys = ["mLGtcsJGsDnMLH30StYK8Nw2pQ6Cs9b9", "mhZTJzkCf3kYrqz9cG3RFvWSNSQV6Yzk"]
+//        }
+//        whiteList = ["abddddd.jpeg"]
+//        minCompressSize 1
+//    }
+//}
 
 android {
     compileSdk 31
