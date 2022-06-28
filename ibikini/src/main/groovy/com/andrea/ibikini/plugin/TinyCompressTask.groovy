@@ -83,7 +83,9 @@ class TinyCompressTask implements Plugin<Project> {
      * @param project
      */
     private static void registerCompressTask() {
-        mProject.tasks.create('pluginCompress') {
+        mProject.tasks.create('tinyCompress') {
+            setGroup('compress')
+            setDescription('compress by tiny-png')
             doLast {
                 BiLog.w(TAG, "project: " + mProject.getRootDir().name)
                 preCompress()
@@ -173,7 +175,7 @@ class TinyCompressTask implements Plugin<Project> {
                 String crc32 = CRCUtils.loadCRC32(picFile)
                 if (!checkImgPathExits(crc32)) {
                     def tinyKeys = mProject.ibikini.compressConfig.tiny.tinyKeys
-                    def result = resizePng(moduleName, tinyKeys, currentKeyIndex, picFile, fileRelativePath)
+                    def result = resizePng(StringUtils.getModuleName(fileRelativePath), tinyKeys, currentKeyIndex, picFile, fileRelativePath)
                     if (result) {
                         String newCrc32 = CRCUtils.loadCRC32(picFile)//新文件的crc32值
                         addImgPath(newCrc32)//保存

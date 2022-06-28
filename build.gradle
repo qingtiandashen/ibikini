@@ -6,11 +6,20 @@ buildscript {
         jcenter()
         mavenLocal()
         maven { url 'https://jitpack.io' }
+        maven {
+            url "$rootDir/ibikini/build/repo"
+        }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:4.2.0"
+        classpath "com.andrea.ibikini:ibikini_debug:0.0.2.4"
     }
 }
+
+///Users/yaweicao/github/ibikini/ibikini/build/repo/com/andrea/ibikini/ibikini_debug/0.0.2.1/ibikini_debug-0.0.2.1.pom
+///Users/yaweicao/github/ibikini/build/repo/com/andrea/ibikini/ibikini_debug/0.0.2.1/ibikini_debug-0.0.2.1.pom
+///Users/yaweicao/github/ibikini/ibikini/Users/yaweicao/github/ibikini/build/repo/com/andrea/ibikini/ibikini_debug/0.0.2.1/ibikini_debug-0.0.2.1.pom
+
 
 allprojects {
     repositories {
@@ -18,6 +27,9 @@ allprojects {
         jcenter()
         maven { url 'https://jitpack.io' }
         mavenLocal()
+        maven {
+            url "$rootDir/ibikini/build/repo"
+        }
     }
 }
 

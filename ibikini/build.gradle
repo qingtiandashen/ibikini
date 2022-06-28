@@ -20,7 +20,7 @@ dependencies {
 
 def realGroupId = "com.andrea.ibikini"
 def realArtifactId = "ibikini"
-def versionName = "0.0.2"
+def versionName = "0.0.2.4"
 
 
 //Gradle 配置的方式注册插件
@@ -37,6 +37,12 @@ gradlePlugin {
 
 afterEvaluate {
     publishing {
+        repositories {
+            maven {
+                url "$buildDir/repo"
+            }
+        }
+
         publications {
             // Creates a Maven publication called "release".
 //            release(MavenPublication) {
@@ -75,15 +81,8 @@ afterEvaluate {
 //    }
 //}
 
-publishing {
-    repositories {
-        maven {
-//            pom.groupId = realGroupId
-//            pom.artifactId = realArtifactId
-//            pom.version = versionName
-//            url = uri("${rootProject.projectDir}/maven-repo")
-            url "$buildDir/repo"
-        }
-    }
+//println "$buildDir/repo"
+//publishing {
 
-}
+
+//}
