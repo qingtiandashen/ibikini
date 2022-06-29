@@ -183,6 +183,7 @@ class TinyCompressTask implements Plugin<Project> {
                         addImgPath(newCrc32)//保存
                     } else {
                         if (currentKeyIndex + 1 > tinyKeys.size()) {//key不够用
+                            BiLog.e(TAG, "没key了，退出")
                             break;
                         }
                     }
@@ -207,11 +208,11 @@ class TinyCompressTask implements Plugin<Project> {
      */
     static boolean resizePng(String moduleName, List<String> tinyKeyList, int keyIndex, File picFile, String fileRelativePath) {
         try {
+            currentKeyIndex = keyIndex
             if (keyIndex + 1 > tinyKeyList.size()) {//key不够用了
                 BiLog.e(TAG, "账号不够用了")
                 return false
             }
-            currentKeyIndex = keyIndex
             def preSize = picFile.size()
             def preMediaType = FileUtils.getFileExtension(picFile)
             def tinyKey = tinyKeyList[keyIndex]
