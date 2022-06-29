@@ -175,10 +175,15 @@ class TinyCompressTask implements Plugin<Project> {
                 String crc32 = CRCUtils.loadCRC32(picFile)
                 if (!checkImgPathExits(crc32)) {
                     def tinyKeys = mProject.ibikini.compressConfig.tiny.tinyKeys
+//                    if (currentKeyIndex)
                     def result = resizePng(StringUtils.getModuleName(fileRelativePath), tinyKeys, currentKeyIndex, picFile, fileRelativePath)
                     if (result) {
                         String newCrc32 = CRCUtils.loadCRC32(picFile)//新文件的crc32值
                         addImgPath(newCrc32)//保存
+                    } else {
+                        if (currentKeyIndex + 1 > tinyKeyList.size()) {//key不够用
+                            return false//退出循环
+                        }
                     }
                 }
             }
