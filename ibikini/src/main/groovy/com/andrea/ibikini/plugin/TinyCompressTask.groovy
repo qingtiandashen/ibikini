@@ -167,7 +167,8 @@ class TinyCompressTask implements Plugin<Project> {
      */
     private static void startCompressProject() {
         startTimeForReport = System.currentTimeMillis()
-        targetFileList.eachWithIndex { File picFile, int picIndex ->
+
+        for (File picFile : targetFileList) {
             def fileRelativePath = picFile.path.replace(mProject.rootDir.path, "")
             //不在白名单，图片大小允许裁剪，没有优化过才优化
             if (!isWhiteList(picFile) && checkImgSize(picFile)) {
@@ -181,13 +182,16 @@ class TinyCompressTask implements Plugin<Project> {
                         String newCrc32 = CRCUtils.loadCRC32(picFile)//新文件的crc32值
                         addImgPath(newCrc32)//保存
                     } else {
-                        if (currentKeyIndex + 1 > tinyKeyList.size()) {//key不够用
-                            return false//退出循环
+                        if (currentKeyIndex + 1 > tinyKeys.size()) {//key不够用
+                            break;
                         }
                     }
                 }
             }
         }
+//        targetFileList.eachWithIndex { File picFile, int picIndex ->
+//
+//        }
         saveFile()//多余一步
         saveReport()
     }
